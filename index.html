@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#eee7d9">
+<meta name="description" content="城西尋影：以老照片為線索，在萬華尋找消失的城市風景。">
+<title>城西尋影｜萬華歷史尋影遊戲</title>
+<link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+<div id="app">
+<header class="topbar">
+ <div class="brand"><div class="brand-mark">影</div><div><h1>城西尋影</h1><p>萬華歷史影像・城市尋景遊戲</p></div></div>
+ <button type="button" class="passport-button" id="passportButton"><span id="countCompleted">0</span><small>／8</small>　尋影護照 ›</button>
+</header>
+<div class="progress-line" aria-label="尋影完成進度"><div id="progressFill"></div></div>
+<main class="layout">
+ <section class="photo-panel" aria-label="昔日建築的歷史照片與尋影任務">
+  <div class="chapter"><span id="chapterCode">ARCHIVE 01 / 08</span><span id="eraText">1930年代</span></div>
+  <div class="subject"><div><h2 id="siteTitle">西本願寺本堂</h2><p id="siteNow">昔日建築的現代位置</p></div><span id="visitState" class="visit-state">待尋訪</span></div>
+  <div class="photo-frame" id="photoFrame">
+   <div class="sprocket sprocket-top" aria-hidden="true"></div>
+   <div class="photo-image"><img id="heroImage" alt="歷史照片" decoding="async"><p id="imagePlaceholder" class="image-placeholder hidden">尚待放入館藏照片</p>
+     <button id="videoTrigger" type="button" class="see-video hidden">▷ 看動圖</button>
+     <button id="photoExpand" type="button" class="photo-expand" aria-label="放大老照片">⛶</button>
+   </div>
+   <div class="sprocket sprocket-bottom" aria-hidden="true"></div>
+  </div>
+  <p class="story" id="storyText">昔日的萬華，等待你走到街角，重新看見。</p>
+  <div class="photo-action">
+    <span id="gpsDistance" class="gps-distance">開啟定位後可查看距離</span>
+    <button id="checkIn" class="checkin" type="button">到點打卡</button>
+  </div>
+ </section>
+ <section class="map-panel" aria-label="輔助尋路的現代街道地圖">
+   <div class="map-heading"><div><span class="map-eyebrow">MAP / 今日街道</span><strong>尋找老照片裡的位置</strong></div><button id="gpsButton" class="gps-button" type="button">◎ 啟用我的位置</button></div>
+   <div class="map-container">
+    <div id="map" role="application" aria-label="萬華街道地圖：可拖曳和雙指縮放">
+       <div id="tileLayer" class="tiles"></div>
+       <svg id="routeSvg" class="route-svg" preserveAspectRatio="none"><polyline id="routeWhite" class="route-white"/><polyline id="routeBlue" class="route-blue"/></svg>
+       <div id="pins" class="pins"></div>
+       <div id="gpsDot" class="gps-dot hidden"></div>
+    </div>
+    <div class="map-controls"><button id="focusTarget" title="查看目標">⌖</button><button id="zoomPlus" title="放大地圖">＋</button><button id="zoomMinus" title="縮小地圖">－</button></div>
+    <div class="map-attribution">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</div>
+    <div class="map-fail hidden" id="mapFail">街道底圖未能載入，請使用外部導航，不要依空白圖行走。</div>
+   </div>
+   <div class="route-bar"><span id="routeStatus">選擇歷史照片以查看對應街區</span><a id="mapsExternal" target="_blank" rel="noopener" href="#">Google 步行導航 ↗</a></div>
+ </section>
+ <nav class="filmstrip" aria-label="選擇八處尋影地點"><div class="filmstrip-top"><span>尋影目錄　／　點選更換主照片</span><button id="tryButton" type="button">體驗測試</button></div><div id="filmEntries" class="film-entries"></div></nav>
+</main>
+</div>
+<div id="arrivalDialog" class="scrim hidden" role="dialog" aria-modal="true" aria-labelledby="arrivalHeading"><div class="dialog arrival-dialog"><p class="kicker">找到昔日的城市座標</p><h2 id="arrivalHeading">已到達！</h2><p id="arrivalTarget"></p><div class="dialog-actions"><button id="arrivalDismiss">稍後</button><button id="arrivalConfirm" class="primary">確認打卡</button></div></div></div>
+<div id="passportDialog" class="scrim hidden" role="dialog" aria-modal="true" aria-labelledby="passportHeading"><div class="dialog passport-dialog"><header><div><p class="kicker">城市影像蒐集冊</p><h2 id="passportHeading">尋影護照 <span id="passportCounter">0/8</span></h2></div><button id="passportClose" class="close" title="關閉">×</button></header><p>完成尋影後，返回文獻館依活動規則領取獎品。</p><div id="passportEntries" class="passport-entries"></div><small>正式獎品兌換須另行設計防重複核銷；此版本僅記錄在本機瀏覽器。</small></div></div>
+<div id="photoDialog" class="scrim hidden" role="dialog" aria-modal="true" aria-labelledby="fullPhotoTitle"><div class="dialog photo-dialog"><header><h2 id="fullPhotoTitle">歷史照片</h2><button id="fullPhotoClose" class="close" title="關閉">×</button></header><img id="fullPhotoImg" alt="歷史照片放大檢視"><p id="fullPhotoDesc"></p><a id="archiveSource" href="#" target="_blank" rel="noopener">臺北市立圖書館典藏來源 ↗</a></div></div>
+<div id="movieDialog" class="scrim hidden" role="dialog" aria-modal="true" aria-labelledby="movieHeading"><div class="dialog movie-dialog"><header><h2 id="movieHeading">歷史影像</h2><button id="movieClose" class="close" title="關閉">×</button></header><video id="moviePlayer" playsinline controls preload="metadata"></video><p>AI 歷史情境重現，非當時的實況紀錄。</p></div></div>
+<div id="helpDialog" class="scrim hidden" role="dialog" aria-modal="true" aria-labelledby="helpHeading"><div class="dialog help-dialog"><header><h2 id="helpHeading">如何使用手機定位</h2><button id="helpClose" class="close">×</button></header><p id="helpMessage">GPS 定位目前無法使用。</p><p>你仍可看老照片與地圖。若要從現在的位置畫出步行路線及完成現地打卡，請在瀏覽器網站設定允許「位置」權限，並使用 HTTPS 網址重新嘗試。</p><button id="helpRetry" class="primary">重新嘗試 GPS</button></div></div>
+<div id="toast" class="toast hidden" role="status"></div>
+<script src="data.js?v=9"></script><script src="app.js?v=9"></script>
+</body></html>
